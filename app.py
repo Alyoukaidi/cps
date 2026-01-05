@@ -56,10 +56,13 @@ if uploaded_file and API_KEY:
                 content = uploaded_file.read().decode("utf-8")
                 transcript = re.sub(r'\d+\n\d{2}:\d{2}:\d{2},\d{3} --> \d{2}:\d{2}:\d{2},\d{3}\n', '', content)
                 
-                # Modèle avec Grounding (Recherche Google)
+                # Utilisation de la syntaxe native "Tool" pour forcer la reconnaissance du moteur de recherche
+                from google.generativeai import types
+
+                # Configuration du modèle
                 model = genai.GenerativeModel(
                     model_name='gemini-2.0-flash',
-                    tools=[{"google_search": {}}]
+                    tools=[types.Tool(google_search_retrieval=types.GoogleSearchRetrieval())]
                 )
 
                 prompt = f"""
